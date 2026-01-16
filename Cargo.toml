@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 solana-client = "1.18"
 solana-sdk = "1.18"
+solana-account-decoder = "1.18"
 teloxide = { version = "0.12", features = ["macros"] }
 tokio = { version = "1.36", features = ["full"] }
 dotenv = "0.15"

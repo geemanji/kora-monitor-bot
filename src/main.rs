@@ -1,4 +1,5 @@
 mod config;
+mod solana;
 
 use config::Config;
 use anyhow::Result;
