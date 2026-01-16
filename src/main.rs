@@ -1,13 +1,19 @@
 mod config;
 mod solana;
+mod bot;
+mod state;
 
 use config::Config;
-use anyhow::Result;
+use solana::client::SolanaClient;
+use solana::reclaim::Reclaimer;
+use state::AppState;
+use anyhow::{Result, Context};
 use log::{info, error};
+use std::sync::Arc;
+use solana_sdk::signature::read_keypair_file;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Initialize env_logger with default level "info" if RUST_LOG is not set
     if std::env::var("RUST_LOG").is_err() {
         std::env::set_var("RUST_LOG", "info");
     }
@@ -15,14 +21,28 @@ async fn main() -> Result<()> {
 
     info!("Kora Monitor Bot starting...");
     
-    match Config::load() {
-        Ok(config) => {
-            info!("Configuration loaded successfully for network: {}", config.network);
-        }
-        Err(e) => {
-            error!("Failed to load configuration: {}. Please ensure .env is configured.", e);
-        }
-    }
+    let config = Config::load()?;
+    
+    // Initialize Solana Client
+    let client = SolanaClient::new(&config.rpc_url);
+    
+    // Initialize Reclaimer
+    // Note: We need to handle the keypair loading safely
+    let operator_keypair = read_keypair_file(&config.operator_keypair_path)
+        .map_err(|e| anyhow::anyhow!("Failed to read keypair file: {}", e))?;
+    
+    let reclaimer = Reclaimer::new(operator_keypair);
+
+    let state = Arc::new(AppState::new(client, reclaimer, config));
+
+    // Spawn background task
+    let bg_state = state.clone();
+    tokio::spawn(async move {
+        bot::alerts::start_background_monitoring(bg_state).await;
+    });
+
+    // Start Telegram bot (blocks main thread)
+    bot::start_bot(state).await;
 
     Ok(())
 }
