@@ -5,7 +5,7 @@ use tokio::time::{sleep, Duration};
 use solana_sdk::native_token::lamports_to_sol;
 
 pub async fn start_background_monitoring(state: Arc<AppState>) {
-    let bot = Bot::new(&state.config.teloxide_token);
+    let _bot = Bot::new(&state.config.teloxide_token);
     // Hardcoded chat ID for alerts - in a real app, this would be stored/configured
     // For now, we assume the bot messages the user who started it or a config ID.
     // Since we don't have the chat ID from the start, we might skip sending *unsolicited* alerts

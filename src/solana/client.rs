@@ -1,5 +1,5 @@
 use solana_client::rpc_client::RpcClient;
-use solana_client::client_error::{ClientError, ClientErrorKind};
+use solana_client::client_error::ClientError;
 use solana_client::rpc_config::{RpcProgramAccountsConfig, RpcAccountInfoConfig};
 use solana_sdk::commitment_config::CommitmentConfig;
 use solana_sdk::pubkey::Pubkey;
@@ -9,6 +9,7 @@ use std::sync::Arc;
 use std::time::Duration;
 use std::str::FromStr;
 use serde::{Serialize, Deserialize};
+use anyhow::{Result, anyhow};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AccountAnalysis {
@@ -42,9 +43,9 @@ impl SolanaClient {
         self.rpc.get_slot()
     }
 
-    pub fn get_sponsored_accounts(&self, kora_node_id: &str) -> Result<Vec<(Pubkey, Account)>, ClientError> {
+    pub fn get_sponsored_accounts(&self, kora_node_id: &str) -> Result<Vec<(Pubkey, Account)>> {
         let program_id = Pubkey::from_str(kora_node_id)
-            .map_err(|_| ClientError::new_with_kind(ClientErrorKind::Custom("Invalid Kora Node ID".into())))?;
+            .map_err(|_| anyhow!("Invalid Kora Node ID"))?;
 
         let config = RpcProgramAccountsConfig {
             filters: None,
@@ -54,11 +55,12 @@ impl SolanaClient {
                 commitment: Some(CommitmentConfig::confirmed()),
                 min_context_slot: None,
             },
-            with_context: false,
+            with_context: Some(false),
         };
 
         self.rpc.get_program_accounts_with_config(&program_id, config)
-    }
+            .map_err(|e| anyhow!("RPC error: {}", e))
+}
 
     pub fn analyze_account(&self, pubkey: &Pubkey, account: &Account) -> Result<AccountAnalysis, ClientError> {
         let data_len = account.data.len();

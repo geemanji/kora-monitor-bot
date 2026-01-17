@@ -7,8 +7,8 @@ use config::Config;
 use solana::client::SolanaClient;
 use solana::reclaim::Reclaimer;
 use state::AppState;
-use anyhow::{Result, Context};
-use log::{info, error};
+use anyhow::Result;
+use log::info;
 use std::sync::Arc;
 use solana_sdk::signature::read_keypair_file;
 

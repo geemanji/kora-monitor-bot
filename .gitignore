@@ -1,2 +1,4 @@
 /target
 /tasks/
+.env
+operator-keypair.json

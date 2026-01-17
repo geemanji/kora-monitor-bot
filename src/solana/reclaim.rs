@@ -98,9 +98,9 @@ mod tests {
         let operator = Keypair::new();
         let reclaimer = Reclaimer::new(operator);
         let whitelisted_pk = Pubkey::new_unique();
-        let whitelist = vec![whitelisted_pk];
+        let _whitelist = vec![whitelisted_pk];
         
-        let target = ReclaimTarget {
+        let _target = ReclaimTarget {
             pubkey: whitelisted_pk,
             reclaimable_lamports: 1000,
             reason: "Test".to_string(),

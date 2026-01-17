@@ -1,4 +1,3 @@
-use std::sync::Arc;
 use tokio::sync::Mutex;
 use crate::solana::client::SolanaClient;
 use crate::solana::reclaim::Reclaimer;
