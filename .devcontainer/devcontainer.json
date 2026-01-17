@@ -1,0 +1,29 @@
+{
+	"name": "Kora Monitor Bot Dev Container",
+	"image": "mcr.microsoft.com/devcontainers/rust:1-1.75-bookworm",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rust-lang.rust-analyzer",
+				"tamasfe.even-better-toml",
+				"serayuzgur.crates",
+				"panicbit.cargo",
+				"ms-azuretools.vscode-docker",
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-sqlite"
+			]
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/sshd:1": {}
+	},
+	"postCreateCommand": "sh -c 'sh -c \"$(curl -sSfL https://release.solana.com/stable/install)\" && cargo install sqlx-cli --no-default-features --features sqlite'",
+	"remoteUser": "vscode",
+	"mounts": [
+		"source=cargo-cache,target=/usr/local/cargo/registry,type=volume",
+		"source=kora-db-data,target=/workspaces/kora-monitor-bot/data,type=volume"
+	],
+	"containerEnv": {
+		"DATABASE_URL": "sqlite:/workspaces/kora-monitor-bot/kora.db"
+	}
+}

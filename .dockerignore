@@ -1,0 +1,9 @@
+target/
+tasks/
+.git/
+.env
+kora.db
+bot_state.json
+WALKTHROUGH_SCRIPT.md
+DEEP_DIVE.md
+**/Cargo.lock

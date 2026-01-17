@@ -19,19 +19,18 @@ pub async fn handle_command(
             bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?
         }
         Command::Status => {
-            let recovered = *state.recovered_sol.lock().await;
+            // Fetch total recovered from DB (async)
+            let recovered = state.get_total_recovered().await;
             
-            // In a real app, we'd fetch live data here.
-            // For now, we'll try to fetch the sponsored accounts count.
             let account_count = match state.client.get_sponsored_accounts(&state.config.kora_node_id) {
                 Ok(accounts) => accounts.len(),
-                Err(_) => 0, // Fallback if RPC fails or ID invalid
+                Err(_) => 0,
             };
 
             let response = format!(
-                "📊 **Kora Monitor Status**\n\n\
-                Accounts Monitored: {}\n\
-                Total SOL Recovered: {:.4} SOL\n\
+                "📊 **Kora Monitor Status**\n\n\u{200b}
+                Accounts Monitored: {}\n\u{200b}
+                Total SOL Recovered: {:.4} SOL\n\u{200b}
                 Network: {}",
                 account_count,
                 recovered,
@@ -40,7 +39,6 @@ pub async fn handle_command(
             bot.send_message(msg.chat.id, response).await?
         }
         Command::Reclaim => {
-            // Trigger a manual check
             bot.send_message(msg.chat.id, "🔎 Scanning for reclaimable accounts...").await?;
             
             match state.client.get_sponsored_accounts(&state.config.kora_node_id) {
@@ -53,13 +51,11 @@ pub async fn handle_command(
                     } else {
                         let total_lamports: u64 = targets.iter().map(|t| t.reclaimable_lamports).sum();
                         let msg_text = format!(
-                            "⚠️ Found {} accounts with a total of {:.4} SOL.\n\
+                            "⚠️ Found {} accounts with a total of {:.4} SOL.\n\u{200b}
                             Reply with 'CONFIRM' to execute reclaim.",
                             targets.len(),
                             lamports_to_sol(total_lamports)
                         );
-                        // In a fuller implementation, we would use a dialogue state machine to handle the confirmation.
-                        // For this simplified version, we'll just report the findings (Dry Run).
                         bot.send_message(msg.chat.id, msg_text).await?
                     }
                 }

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "Running pre-commit checks..."
+
+# Run cargo fmt
+echo "Checking formatting..."
+cargo fmt --all -- --check
+if [ $? -ne 0 ]; then
+    echo "Error: Formatting issues found. Run 'cargo fmt' to fix them."
+    exit 1
+fi
+
+# Run cargo check
+echo "Running cargo check..."
+cargo check
+if [ $? -ne 0 ]; then
+    echo "Error: Code does not compile."
+    exit 1
+fi
+
+echo "All checks passed!"
+exit 0

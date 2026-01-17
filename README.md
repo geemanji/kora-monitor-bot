@@ -64,6 +64,38 @@ RUST_LOG=info cargo run
 - Ensure your `whitelist` in the code includes any critical PDAs or program accounts.
 - The bot performs destructive actions (closing accounts); once closed, data is gone forever.
 
-## Architecture
+## Documentation
 
-See [DEEP_DIVE.md](./DEEP_DIVE.md) for a detailed explanation of the rent model and bot logic.
+
+
+For a deeper understanding of the project, please refer to the following:
+
+- [Onboarding Guide](./docs/guides/onboarding.md) - Getting started for developers.
+
+- [Rent Model Architecture](./docs/architecture/001-rent-model.md) - How Kora rent reclamation works.
+
+
+
+## Production Deployment
+
+
+
+The application is fully containerized for production readiness.
+
+
+
+### Docker Build
+
+```bash
+
+docker build -t kora-monitor-bot .
+
+```
+
+
+
+### Database
+
+The bot uses SQLite for persistence. In production environments, ensure the `kora.db` file is mounted to a persistent volume.
+
+

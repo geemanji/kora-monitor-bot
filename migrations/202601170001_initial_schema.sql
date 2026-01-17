@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS recovered_rent (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pubkey TEXT NOT NULL,
+    amount_lamports INTEGER NOT NULL,
+    reclaimed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS meta_state (
+    key TEXT PRIMARY KEY,
+    value TEXT
+);
