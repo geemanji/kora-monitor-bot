@@ -1,18 +1,19 @@
+use dotenvy::dotenv;
+use serde::Deserialize;
 use std::env;
-use dotenv::dotenv;
-use anyhow::{Result, Context};
+use std::path::PathBuf;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Config {
     pub rpc_url: String,
     pub teloxide_token: String,
-    pub operator_keypair_path: String,
+    pub operator_keypair_path: PathBuf,
     pub kora_node_id: String,
     pub network: String,
 }
 
 impl Config {
-    pub fn load() -> Result<Self> {
+    pub fn from_env() -> anyhow::Result<Self> {
         dotenv().ok();
 
         Ok(Config {

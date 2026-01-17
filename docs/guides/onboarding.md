@@ -5,12 +5,15 @@ Welcome to the Kora Monitor Bot project! This guide will help you set up your de
 ## Development Environment Setup
 
 ### Option 1: Dev Container (Recommended)
+
 The easiest way to get started is using VS Code and Docker.
+
 1. Open the project in VS Code.
 2. When prompted, click **"Reopen in Container"**.
 3. All dependencies (Rust, Solana CLI, SQLx) will be pre-installed automatically.
 
 ### Option 2: Local Setup
+
 1. **Install Prerequisites**:
    - Rust (latest stable)
    - Solana CLI
@@ -41,6 +44,7 @@ The easiest way to get started is using VS Code and Docker.
 ## Testing
 
 Run unit tests frequently:
+
 ```bash
 cargo test
 ```
@@ -48,6 +52,7 @@ cargo test
 ## Production Deployment
 
 The application is containerized. To build the production image:
+
 ```bash
 docker build -t kora-monitor-bot .
 ```

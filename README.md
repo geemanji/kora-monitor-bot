@@ -17,6 +17,16 @@ A Rust-based background service and Telegram bot designed to help Kora operators
 
 ## Setup & Configuration
 
+### Option 1: Dev Container (Recommended)
+
+If you use VS Code, you can start developing instantly:
+
+1. Open the project in VS Code.
+2. Click **"Reopen in Container"** when prompted.
+3. All dependencies (Rust, Solana CLI, SQLite) are pre-configured.
+
+### Option 2: Local Setup
+
 1. **Clone the repository**:
 
    ```bash
@@ -30,11 +40,7 @@ A Rust-based background service and Telegram bot designed to help Kora operators
    cp .env.example .env
    ```
 
-   Edit `.env` with your details:
-   - `RPC_URL`: `https://api.devnet.solana.com` (for testing)
-   - `TELOXIDE_TOKEN`: Your Telegram Bot Token.
-   - `OPERATOR_KEYPAIR_PATH`: Path to the keypair that has authority to close accounts (e.g., `~/.config/solana/id.json`).
-   - `KORA_NODE_ID`: The Program ID or Pubkey used to identify your sponsored accounts.
+   Edit `.env` with your details (see [Configuration Reference](./docs/guides/configuration.md)).
 
 3. **Build**:
 
@@ -50,52 +56,30 @@ Start the bot:
 RUST_LOG=info cargo run
 ```
 
-### Telegram Commands
-
-- `/status`: Check how many accounts are being monitored and total recovered SOL.
-- `/reclaim`: Scan for idle accounts and request confirmation to reclaim rent.
-- `/help`: Show available commands.
-
-## Safety & Disclaimer
-
-**Use at your own risk.**
-
-- Always run in **Dry Run** mode or on **Devnet** first.
-- Ensure your `whitelist` in the code includes any critical PDAs or program accounts.
-- The bot performs destructive actions (closing accounts); once closed, data is gone forever.
-
 ## Documentation
-
-
 
 For a deeper understanding of the project, please refer to the following:
 
-- [Onboarding Guide](./docs/guides/onboarding.md) - Getting started for developers.
+### 📘 Guides
 
-- [Rent Model Architecture](./docs/architecture/001-rent-model.md) - How Kora rent reclamation works.
+- [**Project Goals & Charter**](./docs/PROJECT_GOALS.md) - Our mission and success metrics.
+- [**Onboarding Guide**](./docs/guides/onboarding.md) - Getting started for developers.
+- [**Configuration Reference**](./docs/guides/configuration.md) - Env vars and setup.
+- [**Troubleshooting Runbook**](./docs/guides/troubleshooting.md) - Common errors and fixes.
 
+### 🏗 Architecture & API
 
+- [**Bot Command Reference**](./docs/api/commands.md) - List of Telegram commands.
+- [**Rent Model Architecture**](./docs/architecture/001-rent-model.md) - How Kora rent reclamation works.
+- [**Database Schema**](./docs/architecture/002-database-schema.md) - SQLite data model.
 
-## Production Deployment
+## CI/CD & Deployment
 
+- **CI**: Automated testing and linting via [GitHub Actions](./.github/workflows/ci.yml).
+- **Docker**: Fully containerized for production.
 
+  ```bash
+  docker build -t kora-monitor-bot .
+  ```
 
-The application is fully containerized for production readiness.
-
-
-
-### Docker Build
-
-```bash
-
-docker build -t kora-monitor-bot .
-
-```
-
-
-
-### Database
-
-The bot uses SQLite for persistence. In production environments, ensure the `kora.db` file is mounted to a persistent volume.
-
-
+- **Persistence**: Uses SQLite. Ensure `kora.db` is mounted to a persistent volume in production.

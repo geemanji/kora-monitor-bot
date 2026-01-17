@@ -2,3 +2,4 @@
 /tasks/
 .env
 operator-keypair.json
+.gemini/

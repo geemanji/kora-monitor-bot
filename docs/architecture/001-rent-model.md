@@ -34,4 +34,3 @@ Solana accounts are rent-exempt if they hold 2 years' worth of rent. Closing an 
 
 - **Activity Indexing**: integrating with a Geyser plugin to track "last accessed" timestamps for more accurate inactivity detection.
 - **Batched Transactions**: Grouping multiple closures into single transactions to save on fee costs.
-

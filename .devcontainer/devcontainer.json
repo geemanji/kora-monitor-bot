@@ -1,6 +1,6 @@
 {
 	"name": "Kora Monitor Bot Dev Container",
-	"image": "mcr.microsoft.com/devcontainers/rust:1-1.75-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/rust:1-bookworm",
 	"customizations": {
 		"vscode": {
 			"extensions": [
