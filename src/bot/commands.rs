@@ -26,10 +26,10 @@ pub async fn handle_command(
             };
 
             let response = format!(
-                "📊 **Kora Monitor Status**\n\n"
-                "Accounts Monitored: {}\n"
-                "Total SOL Recovered: {:.4} SOL\n"
-                "Network: {}",
+                "📊 **Kora Monitor Status**\n\n\
+                Accounts Monitored: {}\n\
+                Total SOL Recovered: {:.4} SOL\n\
+                Network: {}",
                 account_count,
                 recovered,
                 state.config.network
@@ -50,8 +50,8 @@ pub async fn handle_command(
                     } else {
                         let total_lamports: u64 = targets.iter().map(|t| t.reclaimable_lamports).sum();
                         let msg_text = format!(
-                            "⚠️ Found {} accounts with a total of {:.4} SOL.\n"
-                            "Reply with 'CONFIRM' to execute reclaim.",
+                            "⚠️ Found {} accounts with a total of {:.4} SOL.\n\
+                            Reply with 'CONFIRM' to execute reclaim.",
                             targets.len(),
                             lamports_to_sol(total_lamports)
                         );
