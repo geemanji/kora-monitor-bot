@@ -12,6 +12,9 @@ pub async fn handle_command(
     state: Arc<AppState>
 ) -> ResponseResult<()> {
     match cmd {
+        Command::Start => {
+            bot.send_message(msg.chat.id, "Welcome to Kora Monitor Bot! Type /help to see available commands.").await?
+        }
         Command::Help => {
             bot.send_message(msg.chat.id, Command::descriptions().to_string()).await?
         }

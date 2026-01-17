@@ -25,6 +25,8 @@ pub async fn start_bot(state: Arc<AppState>) {
 #[derive(teloxide::utils::command::BotCommands, Clone)]
 #[command(rename_rule = "lowercase", description = "Kora Monitor Bot Commands:")]
 pub enum Command {
+    #[command(description = "start the bot.")]
+    Start,
     #[command(description = "display this text.")]
     Help,
     #[command(description = "show status of locked vs reclaimed SOL.")]

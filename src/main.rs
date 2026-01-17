@@ -1,12 +1,8 @@
-mod config;
-mod solana;
-mod bot;
-mod state;
-
-use config::Config;
-use solana::client::SolanaClient;
-use solana::reclaim::Reclaimer;
-use state::AppState;
+use kora_monitor_bot::config::Config;
+use kora_monitor_bot::solana::client::SolanaClient;
+use kora_monitor_bot::solana::reclaim::Reclaimer;
+use kora_monitor_bot::state::AppState;
+use kora_monitor_bot::bot;
 use anyhow::Result;
 use log::info;
 use std::sync::Arc;
@@ -23,11 +19,8 @@ async fn main() -> Result<()> {
     
     let config = Config::load()?;
     
-    // Initialize Solana Client
     let client = SolanaClient::new(&config.rpc_url);
     
-    // Initialize Reclaimer
-    // Note: We need to handle the keypair loading safely
     let operator_keypair = read_keypair_file(&config.operator_keypair_path)
         .map_err(|e| anyhow::anyhow!("Failed to read keypair file: {}", e))?;
     
@@ -35,13 +28,11 @@ async fn main() -> Result<()> {
 
     let state = Arc::new(AppState::new(client, reclaimer, config));
 
-    // Spawn background task
     let bg_state = state.clone();
     tokio::spawn(async move {
         bot::alerts::start_background_monitoring(bg_state).await;
     });
 
-    // Start Telegram bot (blocks main thread)
     bot::start_bot(state).await;
 
     Ok(())
